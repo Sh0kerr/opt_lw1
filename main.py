@@ -1,5 +1,5 @@
 from funcs import f1, f2
-from methods import dichotomy, golden_section, fibbonachi
+from methods import dichotomy, golden_section, fibonacci
 from utils import plot
 
 MIN = -2
@@ -9,7 +9,7 @@ L = 0.001
 EPS = 0.0001
 N = 10
 MAXIMIZATION = False
-METHODS = [dichotomy, golden_section, fibbonachi]
+METHODS = [dichotomy, golden_section, fibonacci]
 
 """
 import matplotlib.pyplot as plt
@@ -124,7 +124,7 @@ if __name__ == "__main__":
     print(res_golden)
     plot(f=FUNC, data=res_golden, min=MIN, max=MAX)
 
-    print(f"\n Метод: {fibbonachi.__name__}")
-    res_fibbonachi = fibbonachi(f=FUNC, a=MIN, b=MAX, l=L, eps=EPS, n=N, maximization=MAXIMIZATION)
-    print(res_fibbonachi)
-    plot(f=FUNC, data=res_fibbonachi, min=MIN, max=MAX)
+    print(f"\n Метод: {fibonacci.__name__}")
+    res_fibonacci = fibonacci(f=FUNC, a=MIN, b=MAX, l=L, maximization=MAXIMIZATION)
+    print(res_fibonacci)
+    plot(f=FUNC, data=res_fibonacci, min=MIN, max=MAX)

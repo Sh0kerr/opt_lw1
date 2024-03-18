@@ -56,6 +56,7 @@ def golden_section(f: callable,
                    maximization: bool=False) -> pd.DataFrame:
     """
     @TODO: походу некорректно работает для f2 хз почему хзхзхзхз
+    лох
     """
     lambd = a + (1 - PHI) * (b - a)
     mu = a + PHI * (b - a)
@@ -95,19 +96,47 @@ def golden_section(f: callable,
     return df
 
 
-def fibbonachi(f: callable, 
-               a: int | float, b: int | float, 
-               l: int | float, eps: int | float, n: int, 
-               maximization: bool=False) -> pd.DataFrame:
-    """
-    @TODO: negro
-    """
-    # assert fib(n) > (b - a) / l
+def fibonacci(f: callable, 
+              a: int | float, b: int | float, l: int | float, 
+              maximization: bool=False) -> pd.DataFrame:
+    n = 0
+    while fib(n) < (b - a) / l:
+        n += 1
 
-    # lambd = a + fib(n - 2) * (b - a) / fib(n)
-    # mu = a + fib(n - 1) * (b - a) / fib(n)
+    lambd = a + fib(n - 2) * (b - a) / fib(n)
+    mu = a + fib(n - 1) * (b - a) / fib(n)
+    k = 0
 
-    # f_lambd = f(lambd)
-    # f_mu = f(mu)
+    f_lambd = f(lambd)
+    f_mu = f(mu)
 
-    pass
+    df = pd.DataFrame({'a': [a], 'b': [b], 
+                       'lambda': [lambd], 'mu': [mu], 
+                       f'{f.__name__}(lambda)': [f_lambd], f'{f.__name__}(mu)': [f_mu]})
+    
+    while k < n - 3:
+        if f_lambd <= f_mu:
+            a = lambd if maximization else a
+            b = b if maximization else mu
+            mu = a + fib(n - k - 2) * (b - a) / fib(n - k - 1) if maximization else lambd
+            lambd = mu if maximization else a + fib(n - k - 3) * (b - a) / fib(n - k - 1)
+            temp = f_mu
+            f_mu = f(mu) if maximization else f_lambd
+            f_lambd = temp if maximization else f(lambd)
+        else:
+            a = a if maximization else lambd
+            b = mu if maximization else b
+            temp = mu
+            mu = lambd if maximization else a + fib(n - k - 2) * (b - a) / fib(n - k - 1)
+            lambd = a + fib(n - k - 3) * (b - a) / fib(n - k - 1) if maximization else temp
+            temp = f_lambd
+            f_lambd = f(lambd) if maximization else f_mu
+            f_mu = temp if maximization else f(mu)
+        k += 1
+
+        df.loc[len(df.index)] = [a, b, lambd, mu, f_lambd, f_mu]
+    
+    df.index += 1
+    df.index.name = 'k'
+
+    return df
