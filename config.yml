@@ -1,0 +1,8 @@
+MIN: -2
+MAX: 2
+FUNC: f1
+L: 0.1
+EPS: 0.01
+N: 10
+MAXIMIZATION: False
+METHODS: [dichotomy, golden_section, fibonacci]
